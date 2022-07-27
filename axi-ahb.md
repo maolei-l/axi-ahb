@@ -1,15 +1,15 @@
 # axi-ahb  
 
 疑问：  
-1. strb的用处有哪些，用于narrow传输  
-2. ahb中，例举一个从access到setup状态的例子  
-3. axi中，为啥回环传输的长度只能是2，4，8，16次传输  
+1. strb的用处有哪些？用于narrow传输，存在数据总线宽度大于传输数据的情形，此时使用strb进行数据选通。
+2. ahb中，例举一个从access到setup状态的例子。从状态机的迁移图可知，在access阶段，psel依旧置高，并可以进入setup阶段    
+3. axi中，为啥回环传输的长度只能是2，4，8，16次传输？<font color=#660000">猜测是为了解决地址对齐问题。如果为2的倍数，可以通过左移右移快速得到对齐地址。</font>  
 4. axi中Lower_Byte_Lane是如何决定的？  
-5. narrow传输的意义在哪里？那种场合较为常见。  
-6. Byte invariance是要解决那个问题，以及如何解决的。  
-7. 
+5. Byte invariance是要解决那个问题，以及如何解决的？主机处理多个ID，每个ID有多个事务时，此时存在同一ID的多个事务不能紧密的返回，只是可以先处理另一个ID的事务。在此过程中，一定要保持同一ID的多个事务的顺序不变。  
 
 ## ahb  
+
+// TODO  
 
 ## axi  
 
@@ -116,7 +116,7 @@ xRSP：
 RRESP：对于一笔burst，可以有多个RRSP  
 BRESP：对于一笔burst，只能有一个BRESP  
 
-## transaction属性暂时不看  
+## transaction属性  
 
 //TODO  
 
@@ -132,3 +132,4 @@ Manager使用标识符识别不同的交易。相同ID必须严格保持顺序�
 
 **具有相同ID的事务回应，其返回顺序和发射顺序一样**  
 
+//TODO 可以构造一些相应的场景进行阐释
