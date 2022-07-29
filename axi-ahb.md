@@ -1,4 +1,4 @@
-# axi-ahb  
+# axi-apb  
 
 疑问：  
 
@@ -6,7 +6,7 @@
 
 ## apb(Advanced Peripheral Bus)  
 
-主要用于低俗且低功率的外围  
+主要用于低速且低功率的外围  
 
 系统信号：  
 1. PCLK
@@ -232,9 +232,9 @@ outstanding vs O-O-O：outstanding是指主机可以不等待数据的返回就�
 2. 对于不同AWID的事务，可以乱序。  
 
 AXI3 vs AXI4(WID):  
-写数据交织(write data interleavin)功能：必须提供WID。比如对于AWID存在以下两个事务：ID0(trans0, trans1),ID1(tran0, trans1)。由于AXI提供了ARID、WID以及BID信号，因此我能清楚的知道我写的数据是对应哪个地址，我产生的回应信号是对于那个地址以及写数据。我可以以 ID0_trans0 ID1_trans0 ID2_trans1 ID0_trans1的形式进行写操作。此时我们保证了对于同一个ID，我们以顺序完成；对于不同ID，我们可以乱序。目的在于进一步提供总线利用率。    
+写数据交织(write data interleavin)功能：必须提供WID。比如对于AWID存在以下两个事务：ID0(trans0, trans1),ID1(tran0, trans1)。由于AXI提供了AWID、WID以及BID信号，因此我能清楚的知道我写的数据是对应哪个地址，我产生的回应信号是对于那个地址以及写数据。我可以以 ID0_trans0 ID1_trans0 ID2_trans1 ID0_trans1的形式进行写操作。此时我们保证了对于同一个ID，我们以顺序完成；对于不同ID，我们可以乱序。目的在于进一步提供总线利用率。    
 
-如果没有WID信号，我们不能进行交织机制，因为我们不能确定我们当前所写的数据对应哪一个ARID。同时由于取消了WID信号，AXI4中的写数据必须按AXID的顺序。此时乱世是说，BID的返回可以不按顺序进行。比如从机接收到了AWID0，AWID1所对应的写数据，但是AWID0的那块地址区域因为某些原因不能写，所以可以先写AWID1所对应的数据，此时可以先返回BID1。  
+如果没有WID信号，我们不能进行交织机制，因为我们不能确定我们当前所写的数据对应哪一个AWID。同时由于取消了WID信号，AXI4中的写数据必须按AWID的顺序。此时乱序是说，BID的返回可以不按顺序进行。比如从机接收到了AWID0，AWID1所对应的写数据，但是AWID0的那块地址区域因为某些原因不能写，所以可以先写AWID1所对应的数据，此时可以先返回BID1。  
 
 总之，OOO和interleaving的区别在于操作粒度，OOO对应于一个事务，而交织对应一个事务里面的多笔分割的操作。  
 
